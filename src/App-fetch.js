@@ -10,25 +10,24 @@ import NotFound from "./Components/NotFound"
 import Rodape from './Components/Rodape'
 import "./index.css"
 import Livro from "./Components/Livro"
-import axios from "axios";
+
 
 class App extends Component{
   state = {
     livros: []
   }
-  async componentDidMount(){
-    try{
-      const { data: livros } = await axios.get("/api/todosOsLivros.json")
-      this.setState({ livros })
-    }catch(error){
-      console.log(error)
-      document
-        .querySelectorAll(".principal")[0]
-        .insertAdjacentHTML(
-          "beforeend",
-          "<p class='erro'> Mensagem de erro</p>"
-        )
-    }
+  componentDidMount(){
+    fetch("/api/todosOsLivros.json")
+      .then(response => response.json())
+      .then(livros => this.setState({livros}))
+      .catch(function(error){
+        document
+        .querySelectorAll("main")[0]
+        .insertAdjacentHTML("beforeend", "<p className='alerta'> Erro ao renderizar </p>")
+      })
+      .finally(function(){
+        console.log("Sempre retorna")
+      })
   }
 
   render(){
